@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import { useCookies } from "react-cookie";
 
-const SignInSignUpForm = ({ isSignUp }) => {
+const SignInSignUpForm = () => {
     const location = useLocation();
     const [isSignIn, setIsSignIn] = useState(true);
 
@@ -164,6 +164,8 @@ const SignInSignUpForm = ({ isSignUp }) => {
                             id="confirmPassword"
                             type="password"
                             placeholder="**********"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
                         />
                     </div>
                 )}

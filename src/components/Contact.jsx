@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import emailjs from "emailjs-com";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -6,6 +10,25 @@ const Contact = () => {
         email: "",
         message: "",
     });
+    const form = useRef();
+    const sendEmail = () => {
+        console.log("Sending email...");
+        emailjs
+            .sendForm(
+                "service_m9qps4h",
+                "template_18wsfys",
+                form.current,
+                "v3ACqHxtlALR-uz8s"
+            )
+            .then(
+                (result) => {
+                    console.log("Email sent successfully:", result.text);
+                },
+                (error) => {
+                    console.error("Email sending failed:", error.text);
+                }
+            );
+    };
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,13 +51,19 @@ const Contact = () => {
 
             if (response.ok) {
                 console.log("Form submitted successfully");
-                alert("Form submitted successfully!");
+
                 // Clear the form after successful submission
                 setFormData({
                     name: "",
                     email: "",
                     message: "",
                 });
+
+                // Send email via EmailJS
+                sendEmail();
+
+                // Display success message or redirect to a thank you page
+                alert("Form submitted successfully!");
             } else {
                 console.error("Form submission failed");
             }
@@ -54,7 +83,7 @@ const Contact = () => {
             </div>
             <div className="bg-white  w-[50%] p-8 m-8 rounded shadow-md ">
                 <h2 className="text-2xl font-semibold mb-4">Contact Us</h2>
-                <form onSubmit={handleSubmit}>
+                <form ref={form} onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label
                             htmlFor="name"
